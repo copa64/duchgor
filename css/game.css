@@ -115,124 +115,164 @@ body {
     }
 }
 
-
-/* ==========================================================================\n   Mobile Game Boy-style touch controls\n   ========================================================================== */
-#mobileControls {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    pointer-events: none;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    touch-action: none;
-}
-
-#mobileControls .mc-group,
-#mobileControls button {
-    pointer-events: auto;
-    touch-action: none;
-}
-
-#mobileControls button {
-    -webkit-tap-highlight-color: transparent;
-    appearance: none;
-    -webkit-appearance: none;
-    border: 0;
-    outline: 0;
-    font: 700 18px/1 Arial, sans-serif;
-    color: #fff;
-    background: rgba(32, 32, 38, 0.88);
-    box-shadow: inset 0 2px 0 rgba(255,255,255,.12), inset 0 -4px 0 rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.35);
-}
-
-#mobileControls button.is-pressed {
-    transform: translateY(3px) scale(.96);
-    background: rgba(70, 70, 78, 0.96);
-    box-shadow: inset 0 3px 5px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.3);
-}
-
-#mcDpad {
-    position: absolute;
-    left: max(18px, env(safe-area-inset-left));
-    bottom: max(22px, env(safe-area-inset-bottom));
-    width: 154px;
-    height: 154px;
-}
-
-#mcDpad button {
-    position: absolute;
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-}
-#mcUp { left: 51px; top: 0; }
-#mcLeft { left: 0; top: 51px; }
-#mcRight { right: 0; top: 51px; }
-#mcDown { left: 51px; bottom: 0; }
-#mcDpadCenter {
-    position: absolute;
-    left: 51px;
-    top: 51px;
-    width: 52px;
-    height: 52px;
-    border-radius: 10px;
-    background: rgba(24,24,29,.92);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-}
-
-#mcActions {
-    position: absolute;
-    right: max(20px, env(safe-area-inset-right));
-    bottom: max(22px, env(safe-area-inset-bottom));
-    width: 150px;
-    height: 150px;
-}
-#mcActions button {
-    position: absolute;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    font-size: 21px;
-}
-/* Classic Game Boy stagger: B higher/left, A lower/right. */
-#mcB { left: 8px; top: 16px; }
-#mcA { right: 8px; bottom: 16px; }
-
-#mcStart {
-    position: absolute;
-    left: 50%;
-    bottom: max(12px, env(safe-area-inset-bottom));
-    transform: translateX(-50%);
-    min-width: 72px;
-    height: 30px;
-    padding: 0 13px;
-    border-radius: 15px;
-    font-size: 11px !important;
-    letter-spacing: 1px;
-    background: rgba(28,28,33,.88) !important;
-}
-#mcStart.is-pressed { transform: translateX(-50%) translateY(2px) scale(.97); }
-
-@media (pointer: coarse) and (orientation: portrait) {
-    #mobileControls { display: block; }
-    #gameCanvas {
-        top: max(0px, env(safe-area-inset-top)) !important;
-        bottom: auto !important;
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
+/* ========================================================================== */
+/* Duch Gor - mobile Game Boy style controller                                */
+/* ========================================================================== */
+@media (hover: none) and (pointer: coarse) {
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        background: #000;
     }
-}
 
-@media (pointer: coarse) and (orientation: landscape) {
-    #mobileControls { display: block; }
-    #mcDpad { left: max(18px, env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); }
-    #mcActions { right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); }
-    #mcStart { bottom: max(12px, env(safe-area-inset-bottom)); }
-}
+    #mobileControls {
+        --mc-button: clamp(78px, 12.2vw, 98px);
+        --mc-dpad: clamp(210px, 31vw, 246px);
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        pointer-events: none;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-user-select: none;
+        user-select: none;
+    }
 
-@media (max-width: 700px) and (orientation: portrait) {
-    #mcDpad { transform: scale(.88); transform-origin: left bottom; }
-    #mcActions { transform: scale(.88); transform-origin: right bottom; }
+    #mobileControls button {
+        -webkit-appearance: none;
+        appearance: none;
+        border: 2px solid rgba(255,255,255,.10);
+        color: #fff;
+        background: linear-gradient(145deg, #25252d, #17171d);
+        box-shadow: 0 7px 0 #0c0c10, 0 10px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+        font: inherit;
+        font-weight: 750;
+        pointer-events: auto;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+        outline: none;
+    }
+
+    #mobileControls button.is-pressed {
+        transform: translateY(4px) scale(.97);
+        box-shadow: 0 3px 0 #0c0c10, 0 5px 10px rgba(0,0,0,.30), inset 0 2px 6px rgba(0,0,0,.25);
+        filter: brightness(.88);
+    }
+
+    /* One visually connected cross, with four independent touch zones. */
+    #mcDpad {
+        position: absolute;
+        width: var(--mc-dpad);
+        height: var(--mc-dpad);
+        pointer-events: none;
+    }
+
+    #mcDpad button, #mcDpadCenter {
+        position: absolute;
+        width: 34%;
+        height: 34%;
+        box-sizing: border-box;
+    }
+
+    #mcDpad button {
+        border-radius: 13px;
+        font-size: 0;
+    }
+
+    #mcDpadCenter {
+        left: 33%; top: 33%;
+        background: #1b1b22;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+        z-index: 2;
+    }
+
+    #mcUp    { left:33%; top:0;    border-radius:14px 14px 5px 5px !important; }
+    #mcDown  { left:33%; bottom:0; border-radius:5px 5px 14px 14px !important; }
+    #mcLeft  { left:0;   top:33%;  border-radius:14px 5px 5px 14px !important; }
+    #mcRight { right:0;  top:33%;  border-radius:5px 14px 14px 5px !important; }
+
+    /* CSS triangles avoid emoji/iOS glyphs and keep all four arrows identical. */
+    #mcDpad button::after {
+        content: "";
+        position: absolute;
+        left: 50%; top: 50%;
+        width: 0; height: 0;
+        transform: translate(-50%, -50%);
+        opacity: .92;
+    }
+    #mcUp::after    { border-left:11px solid transparent; border-right:11px solid transparent; border-bottom:18px solid #fff; }
+    #mcDown::after  { border-left:11px solid transparent; border-right:11px solid transparent; border-top:18px solid #fff; }
+    #mcLeft::after  { border-top:11px solid transparent; border-bottom:11px solid transparent; border-right:18px solid #fff; }
+    #mcRight::after { border-top:11px solid transparent; border-bottom:11px solid transparent; border-left:18px solid #fff; }
+
+    #mcRight.is-pressed::after, #mcLeft.is-pressed::after,
+    #mcUp.is-pressed::after, #mcDown.is-pressed::after { opacity: .72; }
+
+    #mcActions {
+        position: absolute;
+        width: calc(var(--mc-button) * 2.15);
+        height: calc(var(--mc-button) * 1.75);
+        pointer-events: none;
+    }
+    #mcA, #mcB {
+        position: absolute;
+        width: var(--mc-button);
+        height: var(--mc-button);
+        border-radius: 50%;
+        font-size: clamp(30px, 5vw, 39px);
+    }
+    #mcB { left: 0; top: 0; }
+    #mcA { right: 0; bottom: 0; }
+
+    #mcStart {
+        position: absolute;
+        min-width: 126px;
+        height: 50px;
+        padding: 0 22px;
+        border-radius: 25px;
+        font-size: 18px;
+        letter-spacing: 2px;
+        white-space: nowrap;
+    }
+
+    /* Portrait: game stays above; controller is pulled up into the free black area. */
+    @media (orientation: portrait) {
+        #mcDpad {
+            left: max(22px, env(safe-area-inset-left));
+            top: var(--mc-portrait-y, 68vh);
+        }
+        #mcActions {
+            right: max(22px, env(safe-area-inset-right));
+            top: calc(var(--mc-portrait-y, 68vh) + 8px);
+        }
+        #mcStart {
+            right: calc(max(22px, env(safe-area-inset-right)) + 20px);
+            top: calc(var(--mc-portrait-y, 68vh) - 66px);
+        }
+    }
+
+    /* Landscape: controls live ONLY in the black side rails, never over the canvas. */
+    @media (orientation: landscape) {
+        #mobileControls {
+            --mc-button: clamp(72px, 8.2vh, 92px);
+            --mc-dpad: clamp(190px, 28vh, 226px);
+        }
+        #mcDpad {
+            left: var(--mc-left-x, 22px);
+            top: 50%;
+            transform: translateY(-44%);
+        }
+        #mcActions {
+            left: var(--mc-right-x, calc(100vw - 210px));
+            top: 50%;
+            transform: translateY(-37%);
+        }
+        #mcStart {
+            left: var(--mc-start-x, calc(100vw - 190px));
+            top: max(calc(50% - 165px), calc(env(safe-area-inset-top) + 8px));
+        }
+    }
 }
