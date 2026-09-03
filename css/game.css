@@ -116,7 +116,7 @@ body {
 }
 
 /* ========================================================================== */
-/* Duch Gor - mobile Game Boy style controller                                */
+/* Duch Gor - retro handheld mobile controller                                */
 /* ========================================================================== */
 @media (hover: none) and (pointer: coarse) {
     html, body {
@@ -130,8 +130,8 @@ body {
     }
 
     #mobileControls {
-        --mc-button: clamp(78px, 12.2vw, 98px);
-        --mc-dpad: clamp(210px, 31vw, 246px);
+        --mc-button: clamp(58px, 9.3vw, 74px);
+        --mc-dpad: clamp(158px, 23.5vw, 184px);
         position: fixed;
         inset: 0;
         z-index: 1000;
@@ -144,25 +144,27 @@ body {
     #mobileControls button {
         -webkit-appearance: none;
         appearance: none;
-        border: 2px solid rgba(255,255,255,.10);
-        color: #fff;
-        background: linear-gradient(145deg, #25252d, #17171d);
-        box-shadow: 0 7px 0 #0c0c10, 0 10px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+        border: 2px solid rgba(185, 185, 195, 0.68);
+        background: rgba(22, 22, 26, 0.54);
+        color: rgba(245,245,248,.96);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 4px 12px rgba(0,0,0,.24);
         font: inherit;
-        font-weight: 750;
+        font-weight: 700;
         pointer-events: auto;
         touch-action: none;
         -webkit-tap-highlight-color: transparent;
         outline: none;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
     }
 
     #mobileControls button.is-pressed {
-        transform: translateY(4px) scale(.97);
-        box-shadow: 0 3px 0 #0c0c10, 0 5px 10px rgba(0,0,0,.30), inset 0 2px 6px rgba(0,0,0,.25);
-        filter: brightness(.88);
+        transform: scale(.965);
+        background: rgba(15, 15, 20, 0.70);
+        border-color: rgba(220,220,225,.82);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 2px 8px rgba(0,0,0,.20);
     }
 
-    /* One visually connected cross, with four independent touch zones. */
     #mcDpad {
         position: absolute;
         width: var(--mc-dpad);
@@ -170,109 +172,122 @@ body {
         pointer-events: none;
     }
 
-    #mcDpad button, #mcDpadCenter {
-        position: absolute;
-        width: 34%;
-        height: 34%;
-        box-sizing: border-box;
-    }
-
     #mcDpad button {
-        border-radius: 13px;
+        position: absolute;
         font-size: 0;
     }
 
-    #mcDpadCenter {
-        left: 33%; top: 33%;
-        background: #1b1b22;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-        z-index: 2;
+    #mcUp {
+        left: 31%; top: 0;
+        width: 38%; height: 31%;
+        clip-path: polygon(0 0,100% 0,100% 72%,50% 100%,0 72%);
+    }
+    #mcDown {
+        left: 31%; bottom: 0;
+        width: 38%; height: 31%;
+        clip-path: polygon(50% 0,100% 28%,100% 100%,0 100%,0 28%);
+    }
+    #mcLeft {
+        left: 0; top: 31%;
+        width: 31%; height: 38%;
+        clip-path: polygon(0 50%,28% 0,100% 0,100% 100%,28% 100%);
+    }
+    #mcRight {
+        right: 0; top: 31%;
+        width: 31%; height: 38%;
+        clip-path: polygon(0 0,72% 0,100% 50%,72% 100%,0 100%);
     }
 
-    #mcUp    { left:33%; top:0;    border-radius:14px 14px 5px 5px !important; }
-    #mcDown  { left:33%; bottom:0; border-radius:5px 5px 14px 14px !important; }
-    #mcLeft  { left:0;   top:33%;  border-radius:14px 5px 5px 14px !important; }
-    #mcRight { right:0;  top:33%;  border-radius:5px 14px 14px 5px !important; }
-
-    /* CSS triangles avoid emoji/iOS glyphs and keep all four arrows identical. */
     #mcDpad button::after {
         content: "";
         position: absolute;
         left: 50%; top: 50%;
         width: 0; height: 0;
         transform: translate(-50%, -50%);
-        opacity: .92;
+        opacity: .95;
     }
-    #mcUp::after    { border-left:11px solid transparent; border-right:11px solid transparent; border-bottom:18px solid #fff; }
-    #mcDown::after  { border-left:11px solid transparent; border-right:11px solid transparent; border-top:18px solid #fff; }
-    #mcLeft::after  { border-top:11px solid transparent; border-bottom:11px solid transparent; border-right:18px solid #fff; }
-    #mcRight::after { border-top:11px solid transparent; border-bottom:11px solid transparent; border-left:18px solid #fff; }
-
-    #mcRight.is-pressed::after, #mcLeft.is-pressed::after,
-    #mcUp.is-pressed::after, #mcDown.is-pressed::after { opacity: .72; }
+    #mcUp::after    { border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 13px solid rgba(245,245,248,.96); }
+    #mcDown::after  { border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 13px solid rgba(245,245,248,.96); }
+    #mcLeft::after  { border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 13px solid rgba(245,245,248,.96); }
+    #mcRight::after { border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 13px solid rgba(245,245,248,.96); }
 
     #mcActions {
         position: absolute;
-        width: calc(var(--mc-button) * 2.15);
-        height: calc(var(--mc-button) * 1.75);
+        width: calc(var(--mc-button) * 1.95);
+        height: calc(var(--mc-button) * 1.65);
         pointer-events: none;
     }
+
     #mcA, #mcB {
         position: absolute;
         width: var(--mc-button);
         height: var(--mc-button);
         border-radius: 50%;
-        font-size: clamp(30px, 5vw, 39px);
+        font-size: clamp(20px, 3.6vw, 28px);
+        letter-spacing: .4px;
     }
     #mcB { left: 0; top: 0; }
     #mcA { right: 0; bottom: 0; }
 
     #mcStart {
         position: absolute;
-        min-width: 126px;
-        height: 50px;
+        min-width: 128px;
+        height: 44px;
         padding: 0 22px;
-        border-radius: 25px;
-        font-size: 18px;
-        letter-spacing: 2px;
+        border-radius: 24px;
+        font-size: 15px;
+        letter-spacing: 3px;
         white-space: nowrap;
     }
 
-    /* Portrait: game stays above; controller is pulled up into the free black area. */
     @media (orientation: portrait) {
+        #mobileControls {
+            --mc-button: var(--mc-portrait-button, clamp(58px, 9.3vw, 74px));
+            --mc-dpad: var(--mc-portrait-dpad, clamp(158px, 23.5vw, 184px));
+        }
+
         #mcDpad {
-            left: max(22px, env(safe-area-inset-left));
-            top: var(--mc-portrait-y, 68vh);
+            left: max(24px, calc(env(safe-area-inset-left) + 10px));
+            top: var(--mc-portrait-y, 70vh);
         }
+
         #mcActions {
-            right: max(22px, env(safe-area-inset-right));
-            top: calc(var(--mc-portrait-y, 68vh) + 8px);
+            right: max(24px, calc(env(safe-area-inset-right) + 10px));
+            top: calc(var(--mc-portrait-y, 70vh) + 8px);
         }
+
         #mcStart {
-            right: calc(max(22px, env(safe-area-inset-right)) + 20px);
-            top: calc(var(--mc-portrait-y, 68vh) - 66px);
+            left: 50%;
+            transform: translateX(-50%);
+            top: var(--mc-portrait-start-y, 62vh);
+        }
+
+        #mcStart.is-pressed {
+            transform: translateX(-50%) scale(.965);
         }
     }
 
-    /* Landscape: controls live ONLY in the black side rails, never over the canvas. */
     @media (orientation: landscape) {
         #mobileControls {
-            --mc-button: clamp(72px, 8.2vh, 92px);
-            --mc-dpad: clamp(190px, 28vh, 226px);
+            --mc-button: var(--mc-landscape-button, clamp(56px, 14vh, 70px));
+            --mc-dpad: var(--mc-landscape-dpad, clamp(144px, 21vh, 170px));
         }
+
         #mcDpad {
-            left: var(--mc-left-x, 22px);
+            left: var(--mc-left-x, 18px);
             top: 50%;
-            transform: translateY(-44%);
+            transform: translateY(-50%);
         }
+
         #mcActions {
-            left: var(--mc-right-x, calc(100vw - 210px));
-            top: 50%;
-            transform: translateY(-37%);
+            left: var(--mc-right-x, calc(100vw - 160px));
+            top: 55%;
+            transform: translateY(-50%);
         }
+
         #mcStart {
-            left: var(--mc-start-x, calc(100vw - 190px));
-            top: max(calc(50% - 165px), calc(env(safe-area-inset-top) + 8px));
+            left: var(--mc-start-x, calc(100vw - 146px));
+            top: max(calc(50% - 128px), calc(env(safe-area-inset-top) + 6px));
         }
     }
 }

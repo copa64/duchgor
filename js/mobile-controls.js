@@ -1,11 +1,11 @@
-/* Duch Gor - Game Boy style touch controls for mobile browsers. */
+/* Duch Gor - retro handheld touch controls for mobile browsers. */
 (function() {
     "use strict";
 
     const isTouchDevice = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
     if (!isTouchDevice) return;
 
-    // Our START button replaces RPG Maker MZ's built-in touch menu button.
+    // Replace RPG Maker MZ's built-in touch menu button with our own START button.
     if (typeof ConfigManager !== "undefined") {
         const originalApplyData = ConfigManager.applyData;
         ConfigManager.applyData = function(config) {
@@ -27,7 +27,6 @@
         dpad.innerHTML =
             '<button id="mcUp" aria-label="Up"></button>' +
             '<button id="mcLeft" aria-label="Left"></button>' +
-            '<div id="mcDpadCenter" aria-hidden="true"></div>' +
             '<button id="mcRight" aria-label="Right"></button>' +
             '<button id="mcDown" aria-label="Down"></button>';
 
@@ -55,9 +54,11 @@
 
         root.addEventListener("contextmenu", e => e.preventDefault());
         updateLayout();
-        window.addEventListener("resize", scheduleLayout, {passive:true});
-        window.addEventListener("orientationchange", scheduleLayout, {passive:true});
-        if (window.visualViewport) window.visualViewport.addEventListener("resize", scheduleLayout, {passive:true});
+        window.addEventListener("resize", scheduleLayout, { passive: true });
+        window.addEventListener("orientationchange", scheduleLayout, { passive: true });
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", scheduleLayout, { passive: true });
+        }
         setTimeout(updateLayout, 250);
         setTimeout(updateLayout, 900);
     }
@@ -77,33 +78,43 @@
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const portrait = vh >= vw;
+        const safeTop = window.visualViewport ? Math.max(0, window.visualViewport.offsetTop) : 0;
 
         if (portrait) {
-            // Put the controller shortly below the game instead of near the home indicator.
-            const dpadSize = Math.min(246, Math.max(210, vw * 0.31));
-            const safeBottom = 28;
-            const preferred = r.bottom + Math.max(42, vh * 0.045);
-            const latest = vh - dpadSize - safeBottom;
-            const y = Math.max(r.bottom + 24, Math.min(preferred, latest));
-            root.style.setProperty("--mc-portrait-y", Math.round(y) + "px");
+            // Move the game almost under the safe area and keep controls higher.
+            const gameTop = Math.round(safeTop + 10);
+            canvas.style.top = gameTop + "px";
+            canvas.style.bottom = "auto";
+
+            const dpadSize = Math.min(184, Math.max(158, vw * 0.235));
+            const controlsTop = Math.max(r.bottom + 26, Math.round(vh * 0.705));
+
+            root.style.setProperty("--mc-portrait-y", controlsTop + "px");
+            root.style.setProperty("--mc-portrait-start-y", Math.max(gameTop + 8, controlsTop - 64) + "px");
+            root.style.setProperty("--mc-portrait-button", Math.round(Math.min(74, Math.max(58, vw * 0.18))) + "px");
+            root.style.setProperty("--mc-portrait-dpad", Math.round(dpadSize) + "px");
         } else {
-            // Compute positions from the actual canvas edges. This guarantees that the
-            // controller occupies the black side rails and never covers the game.
-            const dpadSize = Math.min(226, Math.max(190, vh * 0.28));
-            const actionWidth = Math.min(92, Math.max(72, vh * 0.082)) * 2.15;
-            const gap = 16;
+            // Restore canvas centering in landscape.
+            canvas.style.top = "0px";
+            canvas.style.bottom = "0px";
+
+            // Keep controls inside the black side rails only.
+            const dpadSize = Math.min(170, Math.max(144, vh * 0.21));
+            const button = Math.min(70, Math.max(56, vh * 0.16));
+            const actionsWidth = Math.round(button * 1.95);
 
             const leftRail = Math.max(0, r.left);
             const rightRail = Math.max(0, vw - r.right);
 
-            const leftX = Math.max(10, (leftRail - dpadSize) / 2);
-            const rightX = r.right + Math.max(gap, (rightRail - actionWidth) / 2);
-            const startWidth = 126;
-            const startX = r.right + Math.max(gap, (rightRail - startWidth) / 2);
+            const leftX = Math.max(10, Math.round((leftRail - dpadSize) / 2));
+            const rightX = Math.round(r.right + Math.max(10, (rightRail - actionsWidth) / 2));
+            const rightRailStartX = Math.round(r.right + Math.max(10, (rightRail - 126) / 2));
 
-            root.style.setProperty("--mc-left-x", Math.round(leftX) + "px");
-            root.style.setProperty("--mc-right-x", Math.round(rightX) + "px");
-            root.style.setProperty("--mc-start-x", Math.round(startX) + "px");
+            root.style.setProperty("--mc-left-x", leftX + "px");
+            root.style.setProperty("--mc-right-x", rightX + "px");
+            root.style.setProperty("--mc-start-x", rightRailStartX + "px");
+            root.style.setProperty("--mc-landscape-button", Math.round(button) + "px");
+            root.style.setProperty("--mc-landscape-dpad", Math.round(dpadSize) + "px");
         }
     }
 
@@ -125,14 +136,19 @@
         }
 
         button.addEventListener("pointerdown", function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             if (pointerId !== null) return;
             pointerId = e.pointerId;
             try { button.setPointerCapture(pointerId); } catch (_) {}
             setPressed(button, key, true);
-        }, {passive:false});
-        button.addEventListener("pointerup", function(e) { e.preventDefault(); e.stopPropagation(); release(e); }, {passive:false});
-        button.addEventListener("pointercancel", release, {passive:false});
+        }, { passive: false });
+        button.addEventListener("pointerup", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            release(e);
+        }, { passive: false });
+        button.addEventListener("pointercancel", release, { passive: false });
         button.addEventListener("lostpointercapture", function() {
             if (pointerId !== null) {
                 setPressed(button, key, false);
@@ -144,20 +160,26 @@
     function bindMenuButton(id) {
         const button = document.getElementById(id);
         button.addEventListener("pointerdown", function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             button.classList.add("is-pressed");
             if (typeof Input !== "undefined" && Input.virtualClick) Input.virtualClick("menu");
-        }, {passive:false});
+        }, { passive: false });
+
         function release(e) {
-            if (e) { e.preventDefault(); e.stopPropagation(); }
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             button.classList.remove("is-pressed");
         }
-        button.addEventListener("pointerup", release, {passive:false});
-        button.addEventListener("pointercancel", release, {passive:false});
+
+        button.addEventListener("pointerup", release, { passive: false });
+        button.addEventListener("pointercancel", release, { passive: false });
     }
 
     if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", createControls, {once:true});
+        document.addEventListener("DOMContentLoaded", createControls, { once: true });
     } else {
         createControls();
     }
