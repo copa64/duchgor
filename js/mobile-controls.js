@@ -125,8 +125,11 @@
 
         const leftRail = Math.max(0, r.left);
         const rightRail = Math.max(0, vw - r.right);
-        const leftX = Math.max(10, (leftRail - dpadSize) / 2 + 12);
-        const rightX = r.right + Math.max(10, (rightRail - actionsWidth) / 2 - 12);
+        // Anchor the controls to the GAME canvas itself, not to the phone rails.
+        // This guarantees that both groups move inward toward the game.
+        const gameGap = 20;
+        const leftX = Math.max(10, r.left - dpadSize - gameGap);
+        const rightX = Math.min(vw - actionsWidth - 10, r.right + gameGap);
         const startWidth = 128;
         const startX = r.right + Math.max(10, (rightRail - startWidth) / 2);
 
