@@ -96,7 +96,7 @@
             const dpadSize = Math.min(184, Math.max(166, vw * 0.24));
             const button = Math.min(74, Math.max(58, vw * 0.18));
 
-            const startTop = Math.round(Math.min(vh - dpadSize - 102, gameBottom + 42));
+            const startTop = Math.round(Math.min(vh - dpadSize - 102, gameBottom + 42)) + 20;
             const controlsTop = Math.round(Math.min(vh - dpadSize - 28, startTop + 72));
 
             root.style.setProperty("--mc-portrait-start-y", startTop + "px");
@@ -125,8 +125,8 @@
 
         const leftRail = Math.max(0, r.left);
         const rightRail = Math.max(0, vw - r.right);
-        const leftX = Math.max(10, (leftRail - dpadSize) / 2);
-        const rightX = r.right + Math.max(10, (rightRail - actionsWidth) / 2);
+        const leftX = Math.max(10, (leftRail - dpadSize) / 2 + 12);
+        const rightX = r.right + Math.max(10, (rightRail - actionsWidth) / 2 - 12);
         const startWidth = 128;
         const startX = r.right + Math.max(10, (rightRail - startWidth) / 2);
 
