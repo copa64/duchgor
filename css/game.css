@@ -116,7 +116,7 @@ body {
 }
 
 /* ========================================================================== */
-/* Duch Gor - retro handheld mobile controller                                */
+/* Duch Gor - compact mobile controller                                       */
 /* ========================================================================== */
 @media (hover: none) and (pointer: coarse) {
     html, body {
@@ -131,7 +131,7 @@ body {
 
     #mobileControls {
         --mc-button: clamp(58px, 9.3vw, 74px);
-        --mc-dpad: clamp(158px, 23.5vw, 184px);
+        --mc-dpad: clamp(166px, 24vw, 184px);
         position: fixed;
         inset: 0;
         z-index: 1000;
@@ -145,7 +145,7 @@ body {
         -webkit-appearance: none;
         appearance: none;
         border: 2px solid rgba(185, 185, 195, 0.68);
-        background: rgba(22, 22, 26, 0.54);
+        background: rgba(22, 22, 26, 0.58);
         color: rgba(245,245,248,.96);
         box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 4px 12px rgba(0,0,0,.24);
         font: inherit;
@@ -159,12 +159,12 @@ body {
     }
 
     #mobileControls button.is-pressed {
-        transform: scale(.965);
-        background: rgba(15, 15, 20, 0.70);
-        border-color: rgba(220,220,225,.82);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 2px 8px rgba(0,0,0,.20);
+        background: rgba(10, 10, 14, 0.76);
+        border-color: rgba(225,225,230,.84);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), 0 2px 7px rgba(0,0,0,.22);
     }
 
+    /* Connected D-pad: four touch zones + a visual centre. */
     #mcDpad {
         position: absolute;
         width: var(--mc-dpad);
@@ -172,37 +172,42 @@ body {
         pointer-events: none;
     }
 
-    #mcDpad button {
+    #mcDpad button,
+    #mcDpadCenter {
         position: absolute;
-        font-size: 0;
+        width: 34%;
+        height: 34%;
+        box-sizing: border-box;
     }
 
-    #mcUp {
-        left: 31%; top: 0;
-        width: 38%; height: 31%;
-        clip-path: polygon(0 0,100% 0,100% 72%,50% 100%,0 72%);
+    #mcDpad button {
+        font-size: 0;
+        border-radius: 8px;
     }
-    #mcDown {
-        left: 31%; bottom: 0;
-        width: 38%; height: 31%;
-        clip-path: polygon(50% 0,100% 28%,100% 100%,0 100%,0 28%);
+
+    #mcDpadCenter {
+        left: 33%;
+        top: 33%;
+        z-index: 2;
+        background: rgba(22, 22, 26, 0.70);
+        border-left: 2px solid rgba(185, 185, 195, 0.40);
+        border-right: 2px solid rgba(185, 185, 195, 0.40);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+        pointer-events: none;
     }
-    #mcLeft {
-        left: 0; top: 31%;
-        width: 31%; height: 38%;
-        clip-path: polygon(0 50%,28% 0,100% 0,100% 100%,28% 100%);
-    }
-    #mcRight {
-        right: 0; top: 31%;
-        width: 31%; height: 38%;
-        clip-path: polygon(0 0,72% 0,100% 50%,72% 100%,0 100%);
-    }
+
+    #mcUp    { left:33%; top:0;    border-radius:10px 10px 3px 3px !important; }
+    #mcDown  { left:33%; bottom:0; border-radius:3px 3px 10px 10px !important; }
+    #mcLeft  { left:0;   top:33%;  border-radius:10px 3px 3px 10px !important; }
+    #mcRight { right:0;  top:33%;  border-radius:3px 10px 10px 3px !important; }
 
     #mcDpad button::after {
         content: "";
         position: absolute;
-        left: 50%; top: 50%;
-        width: 0; height: 0;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
         transform: translate(-50%, -50%);
         opacity: .95;
     }
@@ -243,23 +248,23 @@ body {
     @media (orientation: portrait) {
         #mobileControls {
             --mc-button: var(--mc-portrait-button, clamp(58px, 9.3vw, 74px));
-            --mc-dpad: var(--mc-portrait-dpad, clamp(158px, 23.5vw, 184px));
+            --mc-dpad: var(--mc-portrait-dpad, clamp(166px, 24vw, 184px));
         }
 
         #mcDpad {
             left: max(24px, calc(env(safe-area-inset-left) + 10px));
-            top: var(--mc-portrait-y, 70vh);
+            top: var(--mc-portrait-y, 55vh);
         }
 
         #mcActions {
             right: max(24px, calc(env(safe-area-inset-right) + 10px));
-            top: calc(var(--mc-portrait-y, 70vh) + 8px);
+            top: calc(var(--mc-portrait-y, 55vh) + 8px);
         }
 
         #mcStart {
             left: 50%;
             transform: translateX(-50%);
-            top: var(--mc-portrait-start-y, 62vh);
+            top: var(--mc-portrait-start-y, 49vh);
         }
 
         #mcStart.is-pressed {
@@ -270,7 +275,7 @@ body {
     @media (orientation: landscape) {
         #mobileControls {
             --mc-button: var(--mc-landscape-button, clamp(56px, 14vh, 70px));
-            --mc-dpad: var(--mc-landscape-dpad, clamp(144px, 21vh, 170px));
+            --mc-dpad: var(--mc-landscape-dpad, clamp(150px, 23vh, 176px));
         }
 
         #mcDpad {

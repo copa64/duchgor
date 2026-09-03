@@ -27,6 +27,7 @@
         dpad.innerHTML =
             '<button id="mcUp" aria-label="Up"></button>' +
             '<button id="mcLeft" aria-label="Left"></button>' +
+            '<div id="mcDpadCenter" aria-hidden="true"></div>' +
             '<button id="mcRight" aria-label="Right"></button>' +
             '<button id="mcDown" aria-label="Down"></button>';
 
@@ -74,48 +75,66 @@
         const canvas = document.getElementById("gameCanvas") || document.querySelector("canvas");
         if (!root || !canvas) return;
 
-        const r = canvas.getBoundingClientRect();
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const portrait = vh >= vw;
         const safeTop = window.visualViewport ? Math.max(0, window.visualViewport.offsetTop) : 0;
 
         if (portrait) {
-            // Move the game almost under the safe area and keep controls higher.
-            const gameTop = Math.round(safeTop + 10);
+            /*
+             * RPG Maker normally centres the canvas vertically. On a phone this puts
+             * the controls on top of it, so portrait gets its own balanced layout:
+             * game slightly below the status bar, START below the game and controls
+             * immediately underneath. No giant empty strip in the middle.
+             */
+            const before = canvas.getBoundingClientRect();
+            const gameTop = Math.round(Math.max(safeTop + 58, vh * 0.075));
             canvas.style.top = gameTop + "px";
             canvas.style.bottom = "auto";
 
-            const dpadSize = Math.min(184, Math.max(158, vw * 0.235));
-            const controlsTop = Math.max(r.bottom + 26, Math.round(vh * 0.705));
+            const gameBottom = gameTop + before.height;
+            const dpadSize = Math.min(184, Math.max(166, vw * 0.24));
+            const button = Math.min(74, Math.max(58, vw * 0.18));
 
+            const startTop = Math.round(Math.min(vh - dpadSize - 102, gameBottom + 42));
+            const controlsTop = Math.round(Math.min(vh - dpadSize - 28, startTop + 72));
+
+            root.style.setProperty("--mc-portrait-start-y", startTop + "px");
             root.style.setProperty("--mc-portrait-y", controlsTop + "px");
-            root.style.setProperty("--mc-portrait-start-y", Math.max(gameTop + 8, controlsTop - 64) + "px");
-            root.style.setProperty("--mc-portrait-button", Math.round(Math.min(74, Math.max(58, vw * 0.18))) + "px");
+            root.style.setProperty("--mc-portrait-button", Math.round(button) + "px");
             root.style.setProperty("--mc-portrait-dpad", Math.round(dpadSize) + "px");
         } else {
-            // Restore canvas centering in landscape.
+            // Return RPG Maker canvas to its normal vertical centring in landscape.
             canvas.style.top = "0px";
             canvas.style.bottom = "0px";
 
-            // Keep controls inside the black side rails only.
-            const dpadSize = Math.min(170, Math.max(144, vh * 0.21));
-            const button = Math.min(70, Math.max(56, vh * 0.16));
-            const actionsWidth = Math.round(button * 1.95);
-
-            const leftRail = Math.max(0, r.left);
-            const rightRail = Math.max(0, vw - r.right);
-
-            const leftX = Math.max(10, Math.round((leftRail - dpadSize) / 2));
-            const rightX = Math.round(r.right + Math.max(10, (rightRail - actionsWidth) / 2));
-            const rightRailStartX = Math.round(r.right + Math.max(10, (rightRail - 126) / 2));
-
-            root.style.setProperty("--mc-left-x", leftX + "px");
-            root.style.setProperty("--mc-right-x", rightX + "px");
-            root.style.setProperty("--mc-start-x", rightRailStartX + "px");
-            root.style.setProperty("--mc-landscape-button", Math.round(button) + "px");
-            root.style.setProperty("--mc-landscape-dpad", Math.round(dpadSize) + "px");
+            // Let the browser/RPG Maker apply the restored position before measuring.
+            requestAnimationFrame(() => updateLandscapeRails(root, canvas));
         }
+    }
+
+    function updateLandscapeRails(root, canvas) {
+        if (window.innerHeight >= window.innerWidth) return;
+
+        const r = canvas.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const dpadSize = Math.min(176, Math.max(150, vh * 0.23));
+        const button = Math.min(70, Math.max(56, vh * 0.16));
+        const actionsWidth = button * 1.95;
+
+        const leftRail = Math.max(0, r.left);
+        const rightRail = Math.max(0, vw - r.right);
+        const leftX = Math.max(10, (leftRail - dpadSize) / 2);
+        const rightX = r.right + Math.max(10, (rightRail - actionsWidth) / 2);
+        const startWidth = 128;
+        const startX = r.right + Math.max(10, (rightRail - startWidth) / 2);
+
+        root.style.setProperty("--mc-left-x", Math.round(leftX) + "px");
+        root.style.setProperty("--mc-right-x", Math.round(rightX) + "px");
+        root.style.setProperty("--mc-start-x", Math.round(startX) + "px");
+        root.style.setProperty("--mc-landscape-button", Math.round(button) + "px");
+        root.style.setProperty("--mc-landscape-dpad", Math.round(dpadSize) + "px");
     }
 
     function setPressed(button, key, pressed) {
