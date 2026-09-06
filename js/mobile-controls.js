@@ -54,14 +54,42 @@
         bindMenuButton("mcStart");
 
         root.addEventListener("contextmenu", e => e.preventDefault());
-        updateLayout();
+
+        // Initial mobile Safari layout fix:
+        // the RPG Maker canvas can be created/resized after this script runs.
+        // Recalculate only the layout timing; all accepted v3 positions stay unchanged.
+        refreshInitialLayout();
+        window.addEventListener("load", refreshInitialLayout, { passive: true });
+        window.addEventListener("pageshow", refreshInitialLayout, { passive: true });
         window.addEventListener("resize", scheduleLayout, { passive: true });
         window.addEventListener("orientationchange", scheduleLayout, { passive: true });
         if (window.visualViewport) {
             window.visualViewport.addEventListener("resize", scheduleLayout, { passive: true });
         }
-        setTimeout(updateLayout, 250);
+
+        // Observe late canvas creation / first RPG Maker resize on iOS.
+        const observer = new MutationObserver(() => {
+            const canvas = document.getElementById("gameCanvas") || document.querySelector("canvas");
+            if (canvas) {
+                refreshInitialLayout();
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        setTimeout(() => observer.disconnect(), 3000);
+    }
+
+    function refreshInitialLayout() {
+        updateLayout();
+        requestAnimationFrame(() => {
+            updateLayout();
+            requestAnimationFrame(updateLayout);
+        });
+        setTimeout(updateLayout, 80);
+        setTimeout(updateLayout, 200);
+        setTimeout(updateLayout, 450);
         setTimeout(updateLayout, 900);
+        setTimeout(updateLayout, 1400);
     }
 
     let layoutTimer = 0;
