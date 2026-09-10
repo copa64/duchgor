@@ -4,6 +4,7 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
+
 #errorPrinter {
     position: absolute;
     left: 50%;
@@ -17,6 +18,7 @@ body {
     color: #fff;
     z-index: 9;
 }
+
 #errorName {
     color: #ff0;
     font-weight: bold;
@@ -25,6 +27,7 @@ body {
     -ms-user-select: text;
     user-select: text;
 }
+
 #errorMessage {
     color: #fff;
     -moz-user-select: text;
@@ -32,6 +35,7 @@ body {
     -ms-user-select: text;
     user-select: text;
 }
+
 #retryButton {
     font-size: 20px;
     color: #fff;
@@ -40,6 +44,7 @@ body {
     margin: 20px;
     padding: 10px;
 }
+
 #fpsCounterBox {
     position: absolute;
     left: 5px;
@@ -50,6 +55,7 @@ body {
     opacity: 0.8;
     z-index: 8;
 }
+
 #fpsCounterLabel {
     position: absolute;
     top: 0px;
@@ -62,6 +68,7 @@ body {
     color: #fff;
     text-align: left;
 }
+
 #fpsCounterNumber {
     position: absolute;
     top: 0px;
@@ -74,6 +81,7 @@ body {
     color: #fff;
     text-align: right;
 }
+
 #loadingSpinner {
     margin: auto;
     position: absolute;
@@ -85,6 +93,7 @@ body {
     height: 120px;
     z-index: 10;
 }
+
 #loadingSpinnerImage {
     margin: 0px;
     padding: 0px;
@@ -95,21 +104,26 @@ body {
     border-top: 12px solid rgba(255, 255, 255, 1);
     animation: fadein 2s ease, spin 1.5s linear infinite;
 }
+
 @keyframes fadein {
     0% {
         opacity: 0;
     }
+
     20% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -119,7 +133,9 @@ body {
 /* Duch Gor - compact mobile controller                                       */
 /* ========================================================================== */
 @media (hover: none) and (pointer: coarse) {
-    html, body {
+
+    html,
+    body {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -146,8 +162,8 @@ body {
         appearance: none;
         border: 2px solid rgba(185, 185, 195, 0.68);
         background: rgba(22, 22, 26, 0.58);
-        color: rgba(245,245,248,.96);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 4px 12px rgba(0,0,0,.24);
+        color: rgba(245, 245, 248, .96);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04), 0 4px 12px rgba(0, 0, 0, .24);
         font: inherit;
         font-weight: 700;
         pointer-events: auto;
@@ -160,8 +176,8 @@ body {
 
     #mobileControls button.is-pressed {
         background: rgba(10, 10, 14, 0.76);
-        border-color: rgba(225,225,230,.84);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), 0 2px 7px rgba(0,0,0,.22);
+        border-color: rgba(225, 225, 230, .84);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05), 0 2px 7px rgba(0, 0, 0, .22);
     }
 
     /* Connected D-pad: four touch zones + a visual centre. */
@@ -192,14 +208,33 @@ body {
         background: rgba(22, 22, 26, 0.70);
         border-left: 2px solid rgba(185, 185, 195, 0.40);
         border-right: 2px solid rgba(185, 185, 195, 0.40);
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .03);
         pointer-events: none;
     }
 
-    #mcUp    { left:33%; top:0;    border-radius:10px 10px 3px 3px !important; }
-    #mcDown  { left:33%; bottom:0; border-radius:3px 3px 10px 10px !important; }
-    #mcLeft  { left:0;   top:33%;  border-radius:10px 3px 3px 10px !important; }
-    #mcRight { right:0;  top:33%;  border-radius:3px 10px 10px 3px !important; }
+    #mcUp {
+        left: 33%;
+        top: 0;
+        border-radius: 10px 10px 3px 3px !important;
+    }
+
+    #mcDown {
+        left: 33%;
+        bottom: 0;
+        border-radius: 3px 3px 10px 10px !important;
+    }
+
+    #mcLeft {
+        left: 0;
+        top: 33%;
+        border-radius: 10px 3px 3px 10px !important;
+    }
+
+    #mcRight {
+        right: 0;
+        top: 33%;
+        border-radius: 3px 10px 10px 3px !important;
+    }
 
     #mcDpad button::after {
         content: "";
@@ -211,10 +246,30 @@ body {
         transform: translate(-50%, -50%);
         opacity: .95;
     }
-    #mcUp::after    { border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 13px solid rgba(245,245,248,.96); }
-    #mcDown::after  { border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 13px solid rgba(245,245,248,.96); }
-    #mcLeft::after  { border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 13px solid rgba(245,245,248,.96); }
-    #mcRight::after { border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 13px solid rgba(245,245,248,.96); }
+
+    #mcUp::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 13px solid rgba(245, 245, 248, .96);
+    }
+
+    #mcDown::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 13px solid rgba(245, 245, 248, .96);
+    }
+
+    #mcLeft::after {
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 13px solid rgba(245, 245, 248, .96);
+    }
+
+    #mcRight::after {
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 13px solid rgba(245, 245, 248, .96);
+    }
 
     #mcActions {
         position: absolute;
@@ -223,7 +278,8 @@ body {
         pointer-events: none;
     }
 
-    #mcA, #mcB {
+    #mcA,
+    #mcB {
         position: absolute;
         width: var(--mc-button);
         height: var(--mc-button);
@@ -231,8 +287,16 @@ body {
         font-size: clamp(20px, 3.6vw, 28px);
         letter-spacing: .4px;
     }
-    #mcB { left: 0; top: 0; }
-    #mcA { right: 0; bottom: 0; }
+
+    #mcB {
+        left: 0;
+        top: 0;
+    }
+
+    #mcA {
+        right: 0;
+        bottom: 0;
+    }
 
     #mcStart {
         position: absolute;
@@ -295,4 +359,5 @@ body {
             top: max(calc(50% - 128px), calc(env(safe-area-inset-top) + 6px));
         }
     }
+
 }
