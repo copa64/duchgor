@@ -15,7 +15,7 @@ const scriptUrls = [
     "js/rmmz_sprites.js",
     "js/rmmz_windows.js",
     "js/plugins.js",
-    "js/mobile-controls.js?v=8"
+    "js/mobile-controls.js?v=9"
 ];
 const effekseerWasmUrl = "js/libs/effekseer.wasm";
 
