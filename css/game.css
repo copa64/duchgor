@@ -183,8 +183,8 @@ body {
     /* Connected D-pad: four touch zones + a visual centre. */
     #mcDpad {
         position: absolute;
-        width: var(--mc-dpad);
-        height: var(--mc-dpad);
+        width: calc(var(--mc-dpad) - 5px);
+        height: calc(var(--mc-dpad) - 5px);
         pointer-events: none;
     }
 
