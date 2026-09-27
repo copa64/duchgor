@@ -121,7 +121,7 @@
             canvas.style.bottom = "auto";
 
             const gameBottom = gameTop + before.height;
-            const dpadSize = Math.min(184, Math.max(166, vw * 0.24));
+            const dpadSize = Math.min(184, Math.max(166, vw * 0.24)) - 6;
             const button = Math.min(74, Math.max(58, vw * 0.18));
 
             const startTop = Math.round(Math.min(vh - dpadSize - 102, gameBottom + 42)) + 20;
@@ -147,7 +147,7 @@
         const r = canvas.getBoundingClientRect();
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const dpadSize = Math.min(176, Math.max(150, vh * 0.23));
+        const dpadSize = Math.min(176, Math.max(150, vh * 0.23)) - 6;
         const button = Math.min(70, Math.max(56, vh * 0.16));
         const actionsWidth = button * 1.95;
 
